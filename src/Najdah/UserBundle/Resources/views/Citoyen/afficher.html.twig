@@ -1,0 +1,12 @@
+{# src/Najdah/UserBundle/Resources/views/Citoyen/ajouter.html.twig #}
+
+{% extends "NajdahUserBundle::layout.html.twig" %}
+
+{% block menu_Citoyens %}<span class="selected"></span>{% endblock %}
+{% block menu_Citoyens_active %}active{% endblock %}
+
+{% block body_userBundle %}
+    <h2>Afficher :</h2>
+	
+    {% include "NajdahUserBundle:Citoyen:formulaire.html.twig" %}
+{% endblock %}

@@ -1,0 +1,112 @@
+{# src/Najdah/UserBundle/Resources/views/User/index.html.twig #}
+
+{% extends "NajdahUserBundle::layout.html.twig" %}
+
+{% block menu_Policiers %}{% if type_user=='Policier' %}<span class="selected"></span>{% endif %}{% endblock %}
+{% block menu_Pompiers %}{% if type_user=='Pompier' %}<span class="selected"></span>{% endif %}{% endblock %}
+{% block menu_Policiers_active %}{% if type_user=='Policier' %}active{% endif %}{% endblock %}
+{% block menu_Pompiers_active %}{% if type_user=='Pompier' %}active{% endif %}{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('assets/scripts/form-components.js') }}"></script>
+<script src="{{ asset('assets/plugins/bootstrap-switch/static/js/bootstrap-switch.js') }}" type="text/javascript" ></script>
+{% endblock %}
+
+{% block body_userBundle %}
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PORTLET-->   
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-reorder"></i>Gestion des Roles :</div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"></a>
+                    <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                    <a href="javascript:;" class="reload"></a>
+                    <a href="javascript:;" class="remove"></a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="{{ path('user_roles', {'type_user': type_user,'id': user.id}) }}" method="post" class="form-horizontal">
+
+                    {% if is_granted('ROLE_ADMIN_POLICIER') %} 
+                    <div class="control-group">
+                        <label class="control-label">ROLE_POLICIER</label>
+                        <div class="controls">
+                            <div class="switch" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+                                <input name="ROLE_POLICIER" type="checkbox" {% if user.hasRole('ROLE_POLICIER') %}  checked {% endif %} class="toggle"/>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN_POMPIER') %}
+                    <div class="control-group">
+                        <label class="control-label">ROLE_POMPIER</label>
+                        <div class="controls">
+                            <div class="switch" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+                                <input name="ROLE_POMPIER" type="checkbox" {% if user.hasRole('ROLE_POMPIER') %}  checked {% endif %} class="toggle"/>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <div class="control-group">
+                        <label class="control-label">ROLE_ADMIN_POLICIER</label>
+                        <div class="controls">
+                            <div class="switch" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+                                <input name="ROLE_ADMIN_POLICIER" type="checkbox" {% if user.hasRole('ROLE_ADMIN_POLICIER') %}  checked {% endif %} class="toggle"/>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <div class="control-group">
+                        <label class="control-label">ROLE_ADMIN_POMPIER</label>
+                        <div class="controls">
+                            <div class="switch" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+                                <input name="ROLE_ADMIN_POMPIER" type="checkbox" {% if user.hasRole('ROLE_ADMIN_POMPIER') %}  checked {% endif %} class="toggle"/>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <div class="control-group">
+                        <label class="control-label">ROLE_ADMIN</label>
+                        <div class="controls">
+                            <div class="switch" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+                                <input name="ROLE_ADMIN" type="checkbox" {% if user.hasRole('ROLE_ADMIN') %}  checked {% endif %} class="toggle"/>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <div class="control-group">
+                        <label class="control-label">ROLE_SUPER_ADMIN</label>
+                        <div class="controls">
+                            <div class="switch" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+                                <input name="ROLE_SUPER_ADMIN" type="checkbox" {% if user.hasRole('ROLE_SUPER_ADMIN') %}  checked {% endif %} class="toggle"/>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn blue">Submit</button>
+                        <button type="button" class="btn">Cancel</button>     
+                    </div>
+                </form>
+
+                <!-- END FORM-->  
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript_ready %}
+{{ parent() }}
+FormComponents.init();
+{% endblock %}

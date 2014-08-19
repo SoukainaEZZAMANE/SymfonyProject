@@ -1,0 +1,143 @@
+{# src/Najdah/AppBundle/Resources/views/Declaration/index.html.twig #}
+
+{% extends "NajdahAppBundle::layout.html.twig" %}
+
+{% block menu_Declarations %}<span class="selected"></span>{% endblock %}
+{% block menu_Declarations_active %}active{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('assets/scripts/table_advanced_declaration.js') }}"></script>
+<script src="{{ asset('assets/scripts/ui-modals.js') }}"></script>
+<script type="text/javascript" src="{{ asset('http://maps.google.com/maps/api/js?sensor=false') }}"></script>
+<script type="text/javascript">
+function initialiser_map(newX, newY) {
+    var latlng = new google.maps.LatLng(newX, newY);
+    var options = {
+        center: latlng,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    
+    carte.setOptions(options);
+    marqueur.setPosition(latlng);
+}
+</script>
+{% endblock %}
+
+{% block body_app %}
+<!-- BEGIN EXAMPLE TABLE PORTLET-->
+<div class="portlet box green">
+        <div class="portlet-title">
+                <div class="caption"><i class="icon-globe"></i>Declarations</div>
+                <div class="tools">
+                        <a href="javascript:;" class="reload"></a>
+                        <a href="javascript:;" class="remove"></a>
+                </div>
+        </div>
+        <div class="portlet-body">
+            <div class="table-toolbar">
+                <div class="btn-group">
+                    <button id="sample_editable_1_new" class="btn green"><a href="{{ path('declaration_ajouter') }}">
+                    Add New <i class="icon-plus"></i>
+                    </a></button>
+                </div>
+                <div class="btn-group pull-right">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="icon-angle-down"></i>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#">Print</a></li>
+                        <li><a href="#">Save as PDF</a></li>
+                        <li><a href="#">Export to Excel</a></li>
+                    </ul>
+                </div>
+            </div>
+            <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+                <thead>
+                    <tr>
+                        <th class="hidden">Map</th>
+                        <th>Date</th>
+                        <th>Adresse</th>
+                        <th class="hidden">Position</th>
+                        <th class="hidden">Nombre Blesses</th>
+                        <th>Type</th>
+                        <th>Etat</th>
+                        <th class="hidden">CIN</th>
+                        <th class="hidden">Nom</th>
+                        <th class="hidden">Tel</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for declaration in declarations %}
+                        <tr>
+                            <td class="hidden"><a class=" btn purple btn-large" onClick="javascript:initialiser_map({{ declaration.x }},{{ declaration.y }});" data-toggle="modal" href="#carteModal">Map</a></td>
+                            <td>{{ declaration.date|date('d/m/Y') }}</td>
+                            <td>{{ declaration.Adresse }}</td>
+                            <td class="hidden">({{ declaration.x }},{{ declaration.y }})</td>
+                            <td class="hidden">{{ declaration.nbrBlesses }}</td>
+                            <td>{{ declaration.type.libelle }}</td>
+                            <td>{{ declaration.etat.libelle }}</td>
+                            <td class="hidden">{{ declaration.citoyen.cin }}</td>
+                            <td class="hidden">{{ declaration.citoyen.nom }} {{ declaration.citoyen.prenom }}</td>
+                            <td class="hidden">{{ declaration.citoyen.tel }}</td>
+                            <td>
+                                <a class="btn blue icn-only config" href="{{ path('details_declaration', {'id': declaration.id}) }}" ><i class="icon-eye-open icon-white" /></i></a>
+                                <a class="btn green icn-only config" href="{{ path('declaration_modifier', {'id': declaration.id}) }}" ><i class="icon-edit icon-white" /></i></a>
+                                <a class="btn red icn-only config" href="{{ path('declaration_supprimer', {'id': declaration.id}) }}" ><i class="icon-remove icon-white" /></i></a>
+                                {% if declaration.lienRapport != '' %}<a class="btn yellow icn-only config" href="{{ asset( declaration.webPath ) }}" ><i class="icon-remove icon-white" />Rapport</i></a>{% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <span>Pas (encore !) des declarations !!!</span>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+</div>
+<!-- END EXAMPLE TABLE PORTLET-->
+<div id="carteModal" class="modal container hide fade" tabindex="-1">
+        <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3>Carte</h3>
+        </div>
+        <div class="modal-body">
+            <div id="carte" style="width:100%; height:450px"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn">Close</button>
+        </div>
+</div>
+               
+{% endblock %}
+
+{% block javascript_ready %}
+{{ parent() }}
+
+TableAdvanced.init();
+UIModals.init();
+
+var x=31.62809838;
+var y=-7.998819351;
+latlng = new google.maps.LatLng(x, y);
+
+var options = {
+    center: latlng,
+    zoom: 15,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+};
+
+carte = new google.maps.Map(document.getElementById("carte"), options);
+
+marqueur = new google.maps.Marker({
+    position: latlng,
+    map: carte,
+    draggable: false
+});
+    
+$('#carteModal').on('shown.bs.modal', function () {
+    var currentCenter = carte.getCenter();
+    google.maps.event.trigger(carte, "resize");
+    carte.setCenter(currentCenter);
+});
+{% endblock %}

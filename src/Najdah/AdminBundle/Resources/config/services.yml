@@ -1,0 +1,7 @@
+parameters:
+#    najdah_admin.example.class: Najdah\AdminBundle\Example
+
+services:
+#    najdah_admin.example:
+#        class: %najdah_admin.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

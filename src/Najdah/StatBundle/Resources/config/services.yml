@@ -1,0 +1,7 @@
+parameters:
+#    najdah_stat.example.class: Najdah\StatBundle\Example
+
+services:
+#    najdah_stat.example:
+#        class: %najdah_stat.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

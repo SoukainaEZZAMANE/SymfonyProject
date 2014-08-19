@@ -1,0 +1,17 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     ~
+    database_name:     najdah
+    database_user:     root
+    database_password: ~
+
+    mailer_transport:  gmail
+    mailer_host:       
+    mailer_user:       wideteam.fstg@gmail.com
+    mailer_password:   wideteam2015
+
+    locale:            fr
+    secret:            ThisTokenIsNotSoSecretChangeIt
+    
+    app_name: Najdah App

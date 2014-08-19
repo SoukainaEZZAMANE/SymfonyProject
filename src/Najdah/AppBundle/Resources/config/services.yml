@@ -1,0 +1,13 @@
+parameters:
+#    irisi_cta.example.class: Irisi\CtaBundle\Example
+
+services:
+     najdah.twig.extension.notice:
+        class: Najdah\AppBundle\Twig\Extension\NoticeTwigExtension
+        arguments:
+            doctrine: "@doctrine"
+        tags:
+            - {name: twig.extension}
+#    irisi_cta.example:
+#        class: %irisi_cta.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

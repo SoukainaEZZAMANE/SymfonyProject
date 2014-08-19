@@ -1,0 +1,55 @@
+citoyen_index:
+    pattern:  /Citoyen
+    defaults: { _controller: NajdahUserBundle:Citoyen:index }
+
+citoyen_ajouter:
+    pattern:  /Citoyen/ajouter
+    defaults: { _controller: NajdahUserBundle:Citoyen:ajouter }
+
+citoyen_afficher:
+    pattern:  /Citoyen/afficher/{id}
+    defaults: { _controller: NajdahUserBundle:Citoyen:afficher }
+
+citoyen_modifier:
+    pattern:  /Citoyen/modifier/{id}
+    defaults: { _controller: NajdahUserBundle:Citoyen:modifier }
+
+citoyen_supprimer:
+    pattern:  /Citoyen/supprimer/{id}
+    defaults: { _controller: NajdahUserBundle:Citoyen:supprimer }
+
+user_index:
+    pattern:  /{type_user}
+    defaults: { _controller: NajdahUserBundle:User:index }
+    requirements:
+        type_user: Policier|Pompier
+
+user_ajouter:
+    pattern:  /{type_user}/ajouter
+    defaults: { _controller: NajdahUserBundle:User:ajouter }
+    requirements:
+        type_user: Policier|Pompier
+
+user_afficher:
+    pattern:  /{type_user}/afficher/{id}
+    defaults: { _controller: NajdahUserBundle:User:afficher }
+    requirements:
+        type_user: Policier|Pompier
+
+user_modifier:
+    pattern:  /{type_user}/modifier/{id}
+    defaults: { _controller: NajdahUserBundle:User:modifier }
+    requirements:
+        type_user: Policier|Pompier
+
+user_supprimer:
+    pattern:  /{type_user}/supprimer/{id}
+    defaults: { _controller: NajdahUserBundle:User:supprimer }
+    requirements:
+        type_user: Policier|Pompier
+
+user_roles:
+    pattern:  /{type_user}/roles/{id}
+    defaults: { _controller: NajdahUserBundle:User:roles }
+    requirements:
+        type_user: Policier|Pompier

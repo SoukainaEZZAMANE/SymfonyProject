@@ -1,0 +1,457 @@
+<?php
+
+namespace Najdah\AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Declaration
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Najdah\AppBundle\Repository\DeclarationRepository")
+ */
+class Declaration
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="x", type="string", length=150)
+     */
+    private $x;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="y", type="string", length=150)
+     */
+    private $y;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="adresse", type="string", length=255)
+     */
+    private $adresse;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbrBlesses", type="integer")
+     */
+    private $nbrBlesses;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="natureLanceur", type="string", length=1)
+     */
+    private $natureLanceur;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lienRapport", type="string", length=255, nullable=true)
+     */
+    private $lienRapport;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="Najdah\UserBundle\Entity\Citoyen")
+     * @ORM\JoinColumn(nullable=true)
+    */
+    private $citoyen;
+    /**
+     * @ORM\ManyToOne(targetEntity="Najdah\AppBundle\Entity\Ville")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $ville;
+
+    /**
+    * @ORM\ManyToMany(targetEntity="Najdah\UserBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+    */
+    private $intervenants;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="Najdah\AppBundle\Entity\EtatDeclaration")
+     * @ORM\JoinColumn(nullable=true)
+    */
+    private $etat;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="Najdah\AppBundle\Entity\TypeDeclaration")
+     * @ORM\JoinColumn(nullable=true)
+    */
+    private $type;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="Najdah\AppBundle\Entity\Attachement",mappedBy="declaration")
+     * @ORM\JoinColumn(nullable=true)
+    */
+    private $attachements;
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Declaration
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set x
+     *
+     * @param string $x
+     * @return Declaration
+     */
+    public function setX($x)
+    {
+        $this->x = $x;
+
+        return $this;
+    }
+
+    /**
+     * Get x
+     *
+     * @return string 
+     */
+    public function getX()
+    {
+        return $this->x;
+    }
+
+    /**
+     * Set y
+     *
+     * @param string $y
+     * @return Declaration
+     */
+    public function setY($y)
+    {
+        $this->y = $y;
+
+        return $this;
+    }
+
+    /**
+     * Get y
+     *
+     * @return string 
+     */
+    public function getY()
+    {
+        return $this->y;
+    }
+
+    /**
+     * Set adresse
+     *
+     * @param string $adresse
+     * @return Declaration
+     */
+    public function setAdresse($adresse)
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * Get adresse
+     *
+     * @return string 
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+
+    /**
+     * Set nbrBlesses
+     *
+     * @param integer $nbrBlesses
+     * @return Declaration
+     */
+    public function setNbrBlesses($nbrBlesses)
+    {
+        $this->nbrBlesses = $nbrBlesses;
+
+        return $this;
+    }
+
+    /**
+     * Get nbrBlesses
+     *
+     * @return integer 
+     */
+    public function getNbrBlesses()
+    {
+        return $this->nbrBlesses;
+    }
+
+    /**
+     * Set natureLanceur
+     *
+     * @param string $natureLanceur
+     * @return Declaration
+     */
+    public function setNatureLanceur($natureLanceur)
+    {
+        $this->natureLanceur = $natureLanceur;
+
+        return $this;
+    }
+
+    /**
+     * Get natureLanceur
+     *
+     * @return string 
+     */
+    public function getNatureLanceur()
+    {
+        return $this->natureLanceur;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->intervenants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set citoyen
+     *
+     * @param \Najdah\UserBundle\Entity\Citoyen $citoyen
+     * @return Declaration
+     */
+    public function setCitoyen(\Najdah\UserBundle\Entity\Citoyen $citoyen = null)
+    {
+        $this->citoyen = $citoyen;
+
+        return $this;
+    }
+
+    /**
+     * Get citoyen
+     *
+     * @return \Najdah\UserBundle\Entity\Citoyen 
+     */
+    public function getCitoyen()
+    {
+        return $this->citoyen;
+    }
+
+    /**
+     * Add intervenants
+     *
+     * @param \Najdah\UserBundle\Entity\User $intervenants
+     * @return Declaration
+     */
+    public function addIntervenant(\Najdah\UserBundle\Entity\User $intervenants)
+    {
+        $this->intervenants[] = $intervenants;
+
+        return $this;
+    }
+
+    /**
+     * Remove intervenants
+     *
+     * @param \Najdah\UserBundle\Entity\User $intervenants
+     */
+    public function removeIntervenant(\Najdah\UserBundle\Entity\User $intervenants)
+    {
+        $this->intervenants->removeElement($intervenants);
+    }
+
+    /**
+     * Get intervenants
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIntervenants()
+    {
+        return $this->intervenants;
+    }
+
+    /**
+     * Set etat
+     *
+     * @param \Najdah\AppBundle\Entity\EtatDeclaration $etat
+     * @return Declaration
+     */
+    public function setEtat(\Najdah\AppBundle\Entity\EtatDeclaration $etat = null)
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * Get etat
+     *
+     * @return \Najdah\AppBundle\Entity\EtatDeclaration 
+     */
+    public function getEtat()
+    {
+        return $this->etat;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \Najdah\AppBundle\Entity\TypeDeclaration $type
+     * @return Declaration
+     */
+    public function setType(\Najdah\AppBundle\Entity\TypeDeclaration $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \Najdah\AppBundle\Entity\TypeDeclaration 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Declaration
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set ville
+     *
+     * @param \Najdah\AppBundle\Entity\Ville $ville
+     * @return Declaration
+     */
+    public function setVille(\Najdah\AppBundle\Entity\Ville $ville = null)
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    /**
+     * Get ville
+     *
+     * @return \Najdah\AppBundle\Entity\Ville 
+     */
+    public function getVille()
+    {
+        return $this->ville;
+    }
+
+    /**
+     * Set lienRapport
+     *
+     * @param string $lienRapport
+     * @return Declaration
+     */
+    public function setLienRapport($lienRapport)
+    {
+        $this->lienRapport = $lienRapport;
+
+        return $this;
+    }
+
+    /**
+     * Get lienRapport
+     *
+     * @return string 
+     */
+    public function getLienRapport()
+    {
+        return $this->lienRapport;
+    }
+    
+    public function getUploadDir()
+    {
+        // On retourne le chemin relatif vers l'image pour un navigateur
+        return 'najdah/pdf_rapport';
+    }
+    
+    protected function getUploadRootDir()
+    {
+        // On retourne le chemin relatif vers l'image pour notre code PHP
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+    }
+	
+    public function getWebPath()
+    {
+        return $this->getUploadDir().'/'.$this->getLienRapport().'.pdf';
+    }
+}

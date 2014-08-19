@@ -1,0 +1,80 @@
+{% extends "NajdahPushBundle::layout.html.twig" %}
+
+{% block javascript_ready %}
+//create a new WebSocket object.
+var wsUri = "ws://127.0.0.1:9000/"; 	
+websocket = new WebSocket(wsUri); 
+
+websocket.onopen = function(ev) { // connection is open 
+        alert("vous etes connecté");
+}
+
+$('#send-btn').click(function(){ //use clicks message send button
+
+        var policier=$('#policier :selected').val();//get the destination
+
+        //var e = document.getElementById("type");
+        //var alerte = e.options[e.selectedIndex].text;
+        var alerte = $('#type :selected').text();//get the type of the alert
+        var adresse=$('#adresse').val();//get the adresse
+        var description=$('#description').val();//get the description
+        var type='alerte';
+        //prepare json data
+        var msg = {
+        type:type,
+        destination: policier,
+        alerte: alerte,
+        adresse : adresse,
+        description : description
+        };
+        //convert and send data to server
+        websocket.send(JSON.stringify(msg));
+        alert("message envoyer");
+});
+
+//#### Message received from server?
+websocket.onmessage = function(ev) {
+        var msg = JSON.parse(ev.data); //PHP sends Json data
+        var type = msg.type; //message type
+        if(type=='connexion'){
+                var login=msg.login;//policier login
+                $( "#policier" ).append( "<option value='"+login+"'>"+login );
+                alert("le policier "+login+" vient de se connecter");
+        }
+        else if(type=='reponse'){
+                var reponse=msg.reponse;
+                var login=msg.login;
+                if(reponse=='oui'){
+                        alert("le policier "+login+" accepte l'alerte");		
+                }
+                else{
+                        alert("le policier "+login+" n'accepte pas l'alerte");
+                }
+        }
+        else if(type=='deconnexion'){
+                var login=msg.login;//policier login
+                $("#policier option[value='"+login+"']").remove();
+                alert("le policier "+login+" vient de se deconnecter");
+                }
+};
+
+websocket.onerror = function(ev){$('#message_box').append("<div class=\"system_error\">Error Occurred - "+ev.data+"</div>");}; 
+websocket.onclose = function(ev){$('#message_box').append("<div class=\"system_msg\">Connection Closed</div>");};
+{% endblock %}
+
+{% block body_app %}
+    <label>Liste des Policier : </label>
+    <select id='policier'>
+
+    </select><br/>
+    <label>type d'alert :</label>
+    <select id='type'>
+            <option value='vol'>vol
+            <option value='ascident'>ascident
+    </select><br/>
+    <label>Adresse : </label>
+    <input type='text' id='adresse' placeholder="Adresse ...."/><br/>
+    <label>Description : </label>
+    <input type='text' id='description' placeholder="Description ...."/><br/>
+    <button id="send-btn">Envoyer</button>
+{% endblock %}

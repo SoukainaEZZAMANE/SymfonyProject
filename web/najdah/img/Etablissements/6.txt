@@ -1,0 +1,10 @@
+[InstallShield Silent]
+Version=v7.00
+File=Log File
+[ResponseResult]
+ResultCode=0
+[Application]
+Name=HP Quick Launch Buttons
+Version=6.50.1201
+Company=Hewlett-Packard
+Lang=040c

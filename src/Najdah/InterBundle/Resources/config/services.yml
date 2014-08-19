@@ -1,0 +1,7 @@
+parameters:
+#    najdah_inter.example.class: Najdah\InterBundle\Example
+
+services:
+#    najdah_inter.example:
+#        class: %najdah_inter.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

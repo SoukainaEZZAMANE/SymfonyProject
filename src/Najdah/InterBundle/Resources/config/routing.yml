@@ -1,0 +1,19 @@
+inter_creerUser:
+    pattern:  /creerUser
+    defaults: { _controller: NajdahInterBundle:Inter:creerUser }
+
+inter_setDeclaration:
+    pattern:  /setDeclaration
+    defaults: { _controller: NajdahInterBundle:Inter:setDeclaration }
+
+inter_createRapport:
+    pattern:  /createRapport
+    defaults: { _controller: NajdahInterBundle:Inter:createRapport }
+
+inter_getEtablissement:
+    pattern:  /getEtablissement
+    defaults: { _controller: NajdahInterBundle:Inter:getEtablissement }
+
+inter_connexion:
+    pattern:  /connexion
+    defaults: { _controller: NajdahInterBundle:Inter:connexion }

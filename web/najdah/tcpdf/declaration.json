@@ -1,0 +1,58 @@
+{
+    "type":"Incendie",
+    "nom_a":"ROMANI",
+    "prenom_a":"ABDESSEMED",
+    "cin_a":"J476024",
+    "adresse_a":"Marrakech Marrakech Marrakech Marrakech Marrakech",
+    "type_accidente_a":"conducteur",
+    "immatricul_a":"35069 |D| 6",
+    "autre_a":"Rien à signaler",
+    "num_permis_a":"101201",
+    "cat_permis_a":"B",
+    "status_a":"Non respect de la priorité",
+    
+    "nom_b":"ROMANI",
+    "prenom_b":"ABDESSEMED",
+    "cin_b":"J476024",
+    "adresse_b":"Marrakech Marrakech Marrakech Marrakech Marrakech",
+    "type_accidente_b":"conducteur",
+    "immatricul_b":"35069 |D| 6",
+    "autre_b":"Rien à signaler",
+    "num_permis_b":"101201",
+    "cat_permis_b":"B",
+    "status_b":"Non respect de la priorité",
+    
+    "nom_agent":"McClane",
+    "prenom_agent":"John",
+    "grade":"Lieutenant",
+    "service":"Service S1",
+    
+    
+    "nom":"ROMANI",
+    "prenom":"ABDESSEMED",
+    "cin":"J476024",
+    "adresse":"Marrakech Marrakech Marrakech Marrakech Marrakech",
+    "nationalite":"Marocaine",
+    "type_incident":"Vol porte-feuilles",
+    "violence":"Non",
+     "immatricul":"35069 |D| 6",
+    "autre":"Rien à signaler",
+    "indices":"Aucun",
+    "type_incendie":"Magasin",
+    "lieu_incendie":"Guéliz Marrakech",
+    "degat_humain":"Non",
+    "cause_incendie":"Masse electrique",
+    "num_permis":"101201",
+    "cat_permis":"B",
+    "cause_incendie":"Masse electrique",
+    "type_infraction":"Non respect de la priorité",
+    "lieu_infraction":"Guéliz Marrakech"
+    
+  
+    
+    
+    
+    
+    
+    
+}

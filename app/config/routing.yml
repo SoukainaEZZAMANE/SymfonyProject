@@ -1,0 +1,58 @@
+acceuil:
+    pattern:  /
+    defaults: { _controller: NajdahAppBundle:App:acceuil }
+
+najdah_stat:
+    resource: "@NajdahStatBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr|ar
+
+najdah_inter:
+    resource: "@NajdahInterBundle/Resources/config/routing.yml"
+    prefix:   /Inter/
+
+najdah_etab:
+    resource: "@NajdahEtabBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr|ar
+
+najdah_admin:
+    resource: "@NajdahAdminBundle/Resources/config/routing.yml"
+    prefix:   /
+
+najdah_push:
+    resource: "@NajdahPushBundle/Resources/config/routing.yml"
+    prefix:   /
+
+najdah_user:
+    resource: "@NajdahUserBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr|ar
+
+najdah_app:
+    resource: "@NajdahAppBundle/Resources/config/routing.yml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr|ar
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile

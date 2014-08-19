@@ -1,0 +1,7 @@
+parameters:
+#    irisi_user.example.class: Irisi\UserBundle\Example
+
+services:
+#    irisi_user.example:
+#        class: %irisi_user.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

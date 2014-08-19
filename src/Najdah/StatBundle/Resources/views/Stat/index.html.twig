@@ -1,0 +1,220 @@
+{# src/Najdah/StatBundle/Resources/views/Stat/ajouter.html.twig #}
+
+{% extends "NajdahStatBundle::layout.html.twig" %}
+
+{% block body_app %}
+<!-- BEGIN FORM-->
+<form action="{{ path('stat_index') }}" method="post" class="form-horizontal">
+<!-- BEGIN CHART PORTLETS-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN INTERACTIVE CHART PORTLET-->
+        <div class="portlet box red">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-reorder"></i>Statistiques Globales :</div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"></a>
+                    <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                    <a href="javascript:;" class="reload"></a>
+                    <a href="javascript:;" class="remove"></a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="control-group">
+                    <label class="offset5 control-label">Tri par :</label>
+                    <div class="controls">
+                        <select class="span4 chosen" name="select1" data-placeholder="Choose a Category" tabindex="1">
+                            <option value="jours">Jours</option>
+                            <option value="mois">Mois</option>
+                            <option value="annees">Annees</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn blue">Submit</button>
+                </div>
+                <div id="chart_1" class="chart"></div>
+            </div>
+        </div>
+        <!-- END INTERACTIVE CHART PORTLET--> 
+        <!-- BEGIN INTERACTIVE CHART PORTLET-->
+        <div class="portlet box red">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-reorder"></i>Statistiques Specials :</div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"></a>
+                    <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                    <a href="javascript:;" class="reload"></a>
+                    <a href="javascript:;" class="remove"></a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="control-group">
+                    <div class="controls">
+                        <select name="select2" data-placeholder="Your Favorite Football Team" class="chosen span4" tabindex="1" id="selS0V">
+                            <optgroup label="Les types de declarations">
+                                <option value="Accident">Accident</option>
+                                <option value="Incendie">Incendie</option>
+                                <option value="Vol">Vol</option>
+                            </optgroup>
+                            <optgroup label="Les resultats">
+                                <option value="Resolu">Résolu</option>
+                                <option value="Non Resolu">Non Résolu</option>
+                                <option value="FD">Fausse Declaration</option>
+                            </optgroup>
+                            <optgroup label="Autres">
+                                <option value="nbr Blesses">Nombre de blesses</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <label class="control-label">Tri par :</label>
+                    <div class="controls">
+                        <select name="select3" class="span4 chosen" data-placeholder="Choose a Category" tabindex="1">
+                            <option value="jours">Jours</option>
+                            <option value="mois">Mois</option>
+                            <option value="annees">Annees</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn blue">Submit</button>
+                </div>
+                <div id="chart_2" class="chart"></div>
+            </div>
+        </div>
+        <!-- END INTERACTIVE CHART PORTLET--> 
+    </div>
+</div>
+<!-- END CHART PORTLETS-->
+<!-- BEGIN PIE CHART PORTLET-->
+<div class="row-fluid">
+        <div class="span6">
+                <div class="portlet box yellow">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-reorder"></i>Les Types Declarations :</div>
+                            <div class="tools">
+                                    <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                                    <a href="javascript:;" class="reload"></a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="control-group">
+                                <div class="controls">
+                                    <select name="select4" class="span4 chosen" data-placeholder="Choose a Category" tabindex="1">
+                                        <option value="today">Aujourd'hui</option>
+                                        <option value="mois">Ce mois</option>
+                                        <option value="annee">Cette annee</option>
+                                        <option value="all">Tous</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn blue">Submit</button>
+                            </div>
+                            <div id="pie_chart_1" class="chart"></div>
+                        </div>
+                </div>
+                
+        </div>
+        <div class="span6">
+                <div class="portlet box blue">
+                        <div class="portlet-title">
+                                <div class="caption"><i class="icon-reorder"></i>Les Resultats</div>
+                                <div class="tools">
+                                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                                        <a href="javascript:;" class="reload"></a>
+                                </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="control-group">
+                                <div class="controls">
+                                    <select name="select5" class="span4 chosen" data-placeholder="Choose a Category" tabindex="1">
+                                        <option value="today">Aujourd'hui</option>
+                                        <option value="mois">Ce mois</option>
+                                        <option value="annee">Cette annee</option>
+                                        <option value="all">Tous</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn blue">Submit</button>
+                            </div>
+                            <div id="pie_chart_2" class="chart"></div>
+                        </div>
+                </div>
+                
+        </div>
+</div>
+<!-- END PIE CHART PORTLET-->
+</form>
+<!-- END FORM-->
+{% endblock %}
+
+{% block javascript_ready %}
+{{ parent() }}
+FormComponents.init();
+/*
+var donnees0 = [
+    [10, ],
+    [1, 7],
+    [2, 9],
+    [4, 1 ],
+    [5, 5 ]
+];
+*/
+
+var donnees0 = [
+{% for ligne in donnees0 %}
+    [{{ ligne['dateDec']|date('d') }}, {{ ligne['nombre'] }}],
+{% endfor %}
+];
+
+var donnees1 = [
+{% for ligne in donnees1 %}
+    [{{ ligne['COL1'] }}, {{ ligne['COL2'] }}],
+{% endfor %}
+];
+
+var donnees2 = [
+{% for ligne in donnees2 %}
+    [{{ ligne['COL1'] }}, {{ ligne['COL2'] }}],
+{% endfor %}
+];
+
+var donnees3 = [
+{% for ligne in donnees3 %}
+    [{{ ligne['COL1'] }}, {{ ligne['COL2'] }}],
+{% endfor %}
+];
+
+var donnees4 = [
+{% for ligne in donnees4 %}
+    [{{ ligne['COL1'] }}, {{ ligne['COL2'] }}],
+{% endfor %}
+];
+
+var data1 = [];
+var data2 = [];
+
+data1[0] = {
+    label: "Acc",
+    data: 30
+}
+data1[1] = {
+    label: "Inc",
+    data: 15
+}
+data1[2] = {
+    label: "Vol",
+    data: 55
+}
+
+data2[0] = {
+    label: "Res",
+    data: 175
+}
+data2[1] = {
+    label: "Non Res",
+    data: 15
+}
+data2[2] = {
+    label: "FA",
+    data: 10
+}
+
+Charts.init();
+Charts.initCharts(donnees0, donnees1, donnees2, donnees3, donnees4);
+Charts.initPieCharts(data1, data2);
+{% endblock %}

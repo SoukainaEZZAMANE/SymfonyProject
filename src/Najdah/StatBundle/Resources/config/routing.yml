@@ -1,0 +1,3 @@
+stat_index:
+    pattern:  /Statistiques
+    defaults: { _controller: NajdahStatBundle:Stat:index }

@@ -1,0 +1,7 @@
+parameters:
+#    najdah_push.example.class: Najdah\PushBundle\Example
+
+services:
+#    najdah_push.example:
+#        class: %najdah_push.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,39 @@
+app_acceuil:
+    pattern:  /
+    defaults: { _controller: NajdahAppBundle:App:acceuil , _locale: fr}
+
+declaration_index:
+    pattern:  /Declaration
+    defaults: { _controller: NajdahAppBundle:Declaration:index }
+
+declaration_ajouter:
+    pattern:  /Declaration/ajouter
+    defaults: { _controller: NajdahAppBundle:Declaration:ajouter }
+
+declaration_afficher:
+    pattern:  /Declaration/afficher/{id}
+    defaults: { _controller: NajdahAppBundle:Declaration:afficher }
+
+declaration_modifier:
+    pattern:  /Declaration/modifier/{id}
+    defaults: { _controller: NajdahAppBundle:Declaration:modifier }
+
+declaration_supprimer:
+    pattern:  /Declaration/supprimer/{id}
+    defaults: { _controller: NajdahAppBundle:Declaration:supprimer }
+
+app_allnotice:
+    pattern:  /allnotice
+    defaults: { _controller: NajdahAppBundle:Notice:getAllNotice }
+
+app_nbrNotice:
+    pattern:  /nbrnotice
+    defaults: { _controller: NajdahAppBundle:Notice:getNbrNotice }
+
+app_notice:
+    pattern:  /notices
+    defaults: { _controller: NajdahAppBundle:Notice:getAllNotice }
+
+details_declaration:
+    pattern:  /detailsnotice/{id}
+    defaults: { _controller: NajdahAppBundle:Notice:detailsNotice }

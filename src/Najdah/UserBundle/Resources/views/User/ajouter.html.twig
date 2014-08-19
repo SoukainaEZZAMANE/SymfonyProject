@@ -1,0 +1,14 @@
+{# src/Najdah/UserBundle/Resources/views/User/ajouter.html.twig #}
+
+{% extends "NajdahUserBundle::layout.html.twig" %}
+
+{% block menu_Policiers %}{% if type_user=='Policier' %}<span class="selected"></span>{% endif %}{% endblock %}
+{% block menu_Pompiers %}{% if type_user=='Pompier' %}<span class="selected"></span>{% endif %}{% endblock %}
+{% block menu_Policiers_active %}{% if type_user=='Policier' %}active{% endif %}{% endblock %}
+{% block menu_Pompiers_active %}{% if type_user=='Pompier' %}active{% endif %}{% endblock %}
+
+{% block body_userBundle %}
+    <h2>Ajouter :</h2>
+	
+    {% include "NajdahUserBundle:User:formulaire.html.twig" %}
+{% endblock %}

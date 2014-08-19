@@ -1,0 +1,3 @@
+push_index:
+    pattern:  /Push
+    defaults: { _controller: NajdahPushBundle:Push:index }

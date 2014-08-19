@@ -1,0 +1,33 @@
+{# src/Najdah/UserBundle/Resources/views/layout.html.twig #}
+
+{% extends "::layout.html.twig" %}
+
+{% block sub_menu %}
+{#
+    <li class="last "><a href="{{ path('citoyen_index') }}">
+         <i class="icon-bar-chart"></i><span class="title">Citoyens</span>
+    </a></li>
+    {% if is_granted('ROLE_ADMIN_POLICIER') %}
+        <li class="last "><a href="{{ path('user_index', {'type_user': 'Policier'}) }}">
+            <i class="icon-bar-chart"></i><span class="title">Policiers</span>
+       </a></li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN_POMPIER') %}
+        <li class="last "><a href="{{ path('user_index', {'type_user': 'Pompier'}) }}">
+            <i class="icon-bar-chart"></i><span class="title">Pompiers</span>
+        </a></li> </li>
+    {% endif %}
+#}
+{% endblock %}
+
+{% block body_app %}
+    
+<div>
+    {% block body_userBundle %}
+          {% block fos_user_content %}
+          {% endblock fos_user_content %}
+    {% endblock %}
+</div>
+                
+                
+{% endblock %}

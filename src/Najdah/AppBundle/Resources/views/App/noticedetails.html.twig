@@ -1,0 +1,508 @@
+{% extends "NajdahAppBundle::layout.html.twig" %}
+{% block javascript_ready %}
+
+//create a new WebSocket object.
+var wsUri = "ws://127.0.0.1:9000";
+websocket = new WebSocket(wsUri);
+
+websocket.onopen = function(ev) { // connection is open
+        alert("vous etes connecté");
+}
+
+$('#send-btn').click(function(){ //use clicks message send button
+
+        var lat = $('#latV').val();
+        var lng = $('#lngV').val();//get value of label
+        var adresse="latitude : "+lat+"longtitude : "+lng;
+        var alerte =$('#etat').text();
+        var policier=$( "#loginPolicier" ).text();
+        var description="la déclaration est un(e)"+alerte+"dont ladresse est : "+adresse;
+        alert("lat="+lat+" lng= "+lng+"alerte= "+alerte+"adresse= "+adresse);
+        var type='alerte';
+        //prepare json data
+        var msg = {
+        type:type,
+        destination: policier,
+        lat:lat,
+        lng:lng,
+        alerte: alerte,
+        adresse : adresse,
+        description : description
+        };
+        //convert and send data to server
+        websocket.send(JSON.stringify(msg));
+        alert("message envoyer");
+});
+
+//#### Message received from server.
+websocket.onmessage = function(ev) {
+        var msg = JSON.parse(ev.data); //PHP sends Json data
+        var type = msg.type; //message type
+        if(type=='connexion'){
+               var login=msg.login;//policier login
+               var lat=msg.lat;
+               var lng=msg.lng;
+                alert("loginnnn "+login+"lat"+lat);
+                $( "#loginPolicier" ).text(login+"");
+                $("#lat").text(lat+"");
+                $("#lng").text(lng+"");
+                initialize();
+                alert("le policier "+login+" vient de se connecter"+"position : "+lat+","+lng);
+        }
+        else if(type=='reponse'){
+                var reponse=msg.reponse;
+                var login=msg.login;
+                if(reponse=='oui'){
+                        alert("le policier "+login+" accepte l'alerte");
+                }
+                else{
+                        alert("le policier "+login+" n'accepte pas l'alerte");
+                }
+        }
+        else if(type=='deconnexion'){
+                var login=msg.login;//policier login
+                $("#policier option[value='"+login+"']").remove();
+                alert("le policier "+login+" vient de se deconnecter");
+                }
+};
+
+websocket.onerror = function(ev){$('#message_box').append("<div class=\"system_error\">Error Occurred - "+ev.data+"</div>");};
+websocket.onclose = function(ev){$('#message_box').append("<div class=\"system_msg\">Connection Closed</div>");};
+{% endblock %}
+
+{% block notif %}
+	{{nombreNotice}}
+{% endblock %}
+{% block detailsNotice %}
+	<li>
+             <ul class="dropdown-menu-list scroller" style="height:250px">
+             {% for lastNotice in lastNotices %}
+                 
+             
+                    <li>
+                        <a href="{{ path('details_declaration', { 'id': lastNotice.id }) }}">
+                        <span class="label label-success"><i class="icon-plus"></i></span>
+                          {{lastNotice.adresse}}
+                        <span class="time">{{lastNotice.date|date("Y/m/d")}}</span>
+                        </a>
+                    </li>
+                   {# <li>
+                            <a href="inbox.html?a=view">
+                            <span class="photo"><img src="{{ asset('./assets/img/avatar3.jpg') }}" alt="" /></span>
+                            <span class="subject">
+                            <span class="from">Richard Doe</span>
+                            <span class="time">46 mins</span>
+                            </span>
+                            <span class="message">
+                            Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh
+                            auctor nibh...
+                            </span>  
+                            </a>
+                    </li>
+                    #}
+                                                                   
+                {% endfor %}                                              
+                                                                    
+            </ul>
+    </li>
+{% endblock %}
+
+{% block body_app %}
+	
+
+<div class="portlet box grey">
+							<div class="portlet-title">
+								<div class="caption"><i class="icon-reorder"></i>Détails de la Déclaration</div>
+								<div class="tools">
+									<a href="javascript:;" class="collapse"></a>
+									<a href="#portlet-config" data-toggle="modal" class="config"></a>
+								</div>
+							</div>
+							<div class="portlet-body">
+								<div class="row-fluid">
+									<div class="span7">
+										<!--BEGIN TABS-->
+										<div class="tabbable tabbable-custom">
+                                            {#premier element qui contient la description sur la map ( dont la pemier et la map #}
+                                            {#en tete des 3 Section#}
+											<ul class="nav nav-tabs">
+												<li class="active"><a href="#tab_1_1" data-toggle="tab">Localisation de la déclaration :
+												<label id="etat" class="label label-important"> {{declarationDetails[0].type.libelle}} </label> </a></li>
+												<li><a href="#tab_1_2" data-toggle="tab">Photos</a></li>
+												<li><a href="#tab_1_3" data-toggle="tab">croquie</a></li>
+											</ul>
+	                                        {#Section affichage du map modifier ici #}
+											<div class="tab-content">
+												<div class="tab-pane active" id="tab_1_1">
+													<h4>Etat :
+													 <span  class='label label-warning'>
+													 		 {{declarationDetails[0].etat.libelle}}
+													 </span>
+													 
+													 </h4>
+															<input type="hidden"  id="latV"  value="{{declarationDetails[0].x}}" />
+															<input type="hidden"  id="lngV"  class="" value="{{declarationDetails[0].y}}" />
+
+															<div id="googleMap" style="width:500px;height:380px;">
+																{#ici la map#}
+															</div>
+													<div>
+														 </br>
+													</div>
+														  
+													<div class="alert">
+														L'adresse de l'{{declarationDetails[0].type.libelle}} est <span class='label label-danger'>
+														{{declarationDetails[0].adresse}}</span> </br>
+														cette déclaration a été declarée il y'a <span class='label label-success'>30min</span> 
+													</div>
+													<div class="btn-group">
+														<a class="btn green" href="#" data-toggle="dropdown">
+														Options
+														<i class="icon-angle-down"></i>
+														</a>
+														<div class="dropdown-menu bottom-up hold-on-click dropdown-checkboxes">
+															<label><input type="checkbox">Option 1</label>
+															<label><input type="checkbox">Option 2</label>
+															<label><input type="checkbox">Option 3</label>
+															<label><input type="checkbox">Option 4</label>
+															<label><input type="checkbox">Option 5</label>
+														</div>
+													</div>
+												</div>
+    {#ici l'affichage des photos de la déclaration#}
+    {# 2 eme section ( de la meme span7 #}
+												<div class="tab-pane" id="tab_1_2">
+													<p>Photos associées a cette déclaratio</p>
+          {# debut de gelery images body#}
+                                                    <div class="row-fluid">
+                                                        <div class="span3">
+                                                            <div class="item">
+                                                                <a class="fancybox-button" data-rel="fancybox-button" title="Photo" href="{{ asset('assets/images-declarations/embouteillage-470-262.jpg') }}">
+                                                                    <div class="zoom">
+                                                                        <img src="{{ asset('assets/images-declarations/embouteillage-150-83.jpg') }}" alt="Photo" />
+                                                                        <div class="zoom-icon"></div>
+                                                                    </div>
+                                                                </a>
+                                                                <div class="details">
+                                                                    <a href="#" class="icon"><i class="icon-paper-clip"></i></a>
+                                                                    <a href="#" class="icon"><i class="icon-link"></i></a>
+                                                                    <a href="#" class="icon"><i class="icon-pencil"></i></a>
+                                                                    <a href="#" class="icon"><i class="icon-remove"></i></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="span3">
+                                                            <div class="item">
+                                                                <a class="fancybox-button" data-rel="fancybox-button" title="Photo" href="{{ asset('assets/images-declarations/embouteillage-470-262.jpg') }}">
+                                                                    <div class="zoom">
+                                                                        <img src="{{ asset('assets/images-declarations/embouteillage-150-83.jpg') }}" alt="Photo" />
+                                                                        <div class="zoom-icon"></div>
+                                                                    </div>
+                                                                </a>
+                                                                <div class="details">
+                                                                    <a href="#" class="icon"><i class="icon-paper-clip"></i></a>
+                                                                    <a href="#" class="icon"><i class="icon-link"></i></a>
+                                                                    <a href="#" class="icon"><i class="icon-pencil"></i></a>
+                                                                    <a href="#" class="icon"><i class="icon-remove"></i></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="span3">
+                                                            <div class="item">
+                                                                <a class="fancybox-button" data-rel="fancybox-button" title="Photo" href="{{ asset('assets/images-declarations/embouteillage-470-262.jpg') }}">
+                                                                    <div class="zoom">
+                                                                        <img src="{{ asset('assets/images-declarations/embouteillage-150-83.jpg') }}" alt="Photo" />
+                                                                        <div class="zoom-icon"></div>
+                                                                    </div>
+                                                                </a>
+                                                                <div class="details">
+                                                                    <a href="#" class="icon"><i class="icon-paper-clip"></i></a>
+                                                                    <a href="#" class="icon"><i class="icon-link"></i></a>
+                                                                    <a href="#" class="icon"><i class="icon-pencil"></i></a>
+                                                                    <a href="#" class="icon"><i class="icon-remove"></i></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {# end of images galery#}
+                                                    <p>
+														<a class="btn green" href="ui_tabs_accordions.html#tab_1_2" target="_blank">Activate this tab via URL</a>
+													</p>
+												</div>
+                             {#3 eme section du span7#}
+												<div class="tab-pane" id="tab_1_3">
+													<p>Ici le croquis</p>
+													<p>
+														Duis autem vel eum iriure dolor in hendrerit in vulputate.
+														Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat
+													</p>
+													<p>
+														<a class="btn yellow" href="ui_tabs_accordions.html#tab_1_3" target="_blank">Activate this tab via URL</a>
+													</p>
+												</div>
+											</div>
+										</div>
+										<!--END TABS-->
+									</div>
+
+                                    {#Fin du  span 7 qui contien la description de la map#}
+
+									<div class="space10 visible-phone"></div>
+                             	<div class="span5">
+                                        {#------------------------------------------------------------ #}
+                                        <div class="portlet">
+                                            <div class="portlet-title line">
+                                                <div class="caption"><i class="icon-male"></i>Liste des policiers</div>
+                                                <div class="tools">
+                                                    <a href="" class="collapse"></a>
+                                                    <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                                                    <a href="" class="reload"></a>
+                                                    <a href="" class="remove"></a>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body" id="chats">
+                                                <div class="scroller" style="height:435px" data-always-visible="1" data-rail-visible1="1">
+                                                    <ul class="chats">
+
+                                                        <li class="in">
+                                                            <img class="avatar" alt="" src="{{ asset('assets/img/avatar.png') }}" />
+                                                            <div class="message">
+                                                                <span class="arrow"></span>
+                                                                <a href="#" class="name">Informations basic du policier</a>
+                                                                <span class="datetime">Né le :</span>
+													<span class="body">
+      {#Information du policier#}
+                                                    <label>Login : </label><label id="loginPolicier" ></label>
+                                                    <label>Latitude : </label><label id="lat"  ></label>
+                                                    <label>Langtitude : </label><label id="lng"  ></label>
+													<p>travail dans l'équipe de recherche et controle du wilaya de marrakech </p> </br>
+                                                        <p>
+                                                            <button id="send-btn"  class="btn green icn-only"><i class="icon-share icon-white"></i></button>
+                                                            <a href="#" class="btn blue icn-only"><i class="icon-user icon-white"></i></a>
+                                                        </p>
+													</span>
+                                                            </div>
+                                                        </li>
+
+
+
+                                                    </ul>
+                                                </div>
+                                                <div class="chat-form">
+                                                    <div class="input-cont">
+                                                        <input class="m-wrap" type="text" placeholder="Type a message here..." />
+                                                    </div>
+                                                    <div class="btn-cont">
+                                                        <span class="arrow"></span>
+                                                        <a href="" class="btn blue icn-only"><i class="icon-ok icon-white"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- END Portlet PORTLET-->
+                                    </div>
+                                        {#-------------------------------------------------------------#}
+										<!--BEGIN TABS-->                                    
+									{#	<div class="tabbable tabbable-custom tabs-below">
+											<div class="tab-content">
+												<div class="tab-pane active" id="tab_2_1">
+													<p>Affectation des policiers</p>
+													<div class="alert">
+														
+													</div>
+													
+													
+ <label>Liste des Policier : </label>
+    <select id='policier'>
+
+    </select><br/>
+    <label>type d'alert :</label>
+    <select id='type'>
+            <option value='vol'>vol
+            <option value='ascident'>ascident
+    </select><br/>
+    <input type='text' id='adresse' value="{{declarationDetails[0].adresse}}" placeholder="adresse ...."/><br/>
+    <input type='hidden' id='lat' value="{{declarationDetails[0].x}}" placeholder="Latitude ...."/><br/>
+    <input type='hidden' id='lng' value="{{declarationDetails[0].y}}" placeholder="Langtitude ...."/><br/>
+    <label>Lantitude Policier : </label>
+    <input type='text' id='latPolicier' value="" placeholder="Latitude ...."/><br/>
+    <label>Langtitude Policier : </label>
+    <input type='text' id='lngPolicier' value="" placeholder="Langtitude ...."/><br/>
+    <input type='hidden' id='description' value="{{declarationDetails[0].natureLanceur}}" placeholder="Nature lanceur : ...."/><br/>
+    <button id="send-btn" class="btn red">Affecter à la mission</button>
+
+												</div>
+												<div class="tab-pane" id="tab_2_2">
+													<p>Howdy, I'm in Section 2.</p>
+													<p>
+														Duis autem vel eum iriure dolor in hendrerit in vulputate.
+														Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.
+													</p>
+													<p>
+														<a class="btn yellow" href="ui_tabs_accordions.html#tab_2_2" target="_blank">Activate this tab via URL</a> 
+													</p>
+												</div>
+												<div class="tab-pane" id="tab_2_3">
+													<p>Howdy, I'm in Section 3.</p>
+													<p>
+														Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate.                                          
+													</p>
+													<p>
+														<a  class="btn purple" href="ui_tabs_accordions.html#tab_2_3" target="_blank">Activate this tab via URL</a> 
+													</p>
+												</div>
+											</div>
+											<ul class="nav nav-tabs">
+												<li class="active"><a href="#tab_2_1" data-toggle="tab">Section 1</a></li>
+												<li><a href="#tab_2_2" data-toggle="tab">Section 2</a></li>
+												<li><a href="#tab_2_3" data-toggle="tab">Section 3</a></li>
+										<!--END TABS-->
+									</div>
+								</div>
+      {# Début de la 3 eme section les informations sur les diff element#}
+								<div class="row-fluid">
+									<div class="span6">
+										<!--BEGIN TABS-->
+										<div class="tabbable tabbable-custom tabs-left">
+											<!-- Only required for left/right tabs -->
+											<ul class="nav nav-tabs tabs-left">
+												<li class="active"><a href="#tab_3_1" data-toggle="tab">Information sur le victime</a></li>
+												<li ><a href="#tab_3_2" data-toggle="tab">Informations su la déclaration</a></li>
+												<li><a href="#tab_3_3" data-toggle="tab">Autres informations</a></li>
+											</ul>
+											<div class="tab-content">
+												<div class="tab-pane active" id="tab_3_1">
+													<p>Informations générales</p>
+													
+  {# ici les information du user #}
+												
+													<li class="in">
+														<img class="avatar" alt="" src={{asset('assets/img/avatar1.jpg')}} />
+														<div class="message">
+															<span class="arrow"></span>
+															<a href="" class="name">Bob Nilson</a>
+															<span class="datetime">Né le : 16/11/1886</span>
+															</br>
+															<span class="body">
+															   	CIN : <label class="label label-info"> BG54745 </label> </br>
+															   	Age : 28 ans </br>
+															   	Sexe : Homme </br>
+															   	Catégorie de song : <label class="label label-info"> AB </label>
+															</span>
+														</div>
+													</li>
+
+												</div>
+												<div class="tab-pane " id="tab_3_2">
+													<p>déclaration Numero <span class="label label-important"> {{declarationDetails[0].id}} </span>
+													</p>
+													<p>
+														Etat : <span class="label label-important">
+														        {{declarationDetails[0].etat.libelle}} </span>
+													</p>
+													<p>
+														
+													</p>
+												</div>
+												<div class="tab-pane" id="tab_3_3">
+													<p>Howdy, I'm in Section 3.</p>
+													<p>
+														Less content here.                                           
+													</p>
+													<p>
+														<a class="btn green" href="ui_tabs_accordions.html#tab_3_3" target="_blank">Activate this tab via URL</a>
+													</p>
+												</div>
+											</div>
+										</div>
+										<!--END TABS-->
+									</div>
+									<div class="space10 visible-phone"></div>
+								</div>
+							</div>
+						</div>
+<script>
+    function initialize()
+    {
+        var lat = document.getElementById("lat").value;
+        var lng = document.getElementById("lng").value;
+        //alert("lat "+lat+"lng "+lng);
+        var latPolicier = 31.01245;
+        var latPolicier1 = 31.11245;
+        //document.getElementById("latPolicier").value;
+        var lngPolicier = -8.1204;
+        var lngPolicier1 = -8.0204;
+
+        //document.getElementById("lngPolicier").value;
+        alert("latPolicier " + latPolicier + "lngPolicier" + lngPolicier);
+        var myCenter = new google.maps.LatLng(lat, lng);
+        var CenterPolicier = new google.maps.LatLng(latPolicier, lngPolicier);
+        var CenterPolicier1 = new google.maps.LatLng(latPolicier1, lngPolicier1);
+        var markerDeclaration;
+        var markerPolicier;
+        var markerPolicier1;
+        //var lat = $('#lat').text();
+        //var lng = $('#lng').text();
+        // alert("lat= "+lat+" lng = "+lng);
+
+        var mapProp = {
+            center: new google.maps.LatLng(lat, lng),
+            zoom: 9,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap")
+                , mapProp);
+
+        markerDeclaration = new google.maps.Marker({
+            position: myCenter,
+            animation: google.maps.Animation.BOUNCE
+        });
+        /* markerPolicier=new google.maps.Marker({
+         position:CenterPolicier
+         });
+         */
+        markerPolicier = new google.maps.Marker({
+            position: CenterPolicier,
+            map: map,
+            title: "Policier"
+        });
+        markerPolicier1 = new google.maps.Marker({
+            position: CenterPolicier1,
+            map: map,
+            title: "Policier"
+        });
+
+        markerPolicier.setMap(map);
+        markerPolicier1.setMap(map);
+        markerDeclaration.setMap(map);
+        google.maps.event.addListener(markerPolicier1, 'click', function() {
+            alert("je suis le policier1");
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+
+{#
+<script src="assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+
+{#pour la galerie
+
+<script src="{{ asset('assets/plugins/fancybox/source/jquery.fancybox.pack.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/chosen-bootstrap/chosen/chosen.jquery.min.js')}}"></script>
+<script src="{{ asset('assets/scripts/app.js') }}"></script>
+<script src="{{ asset('assets/scripts/gallery.js') }}"></script>
+
+<script>
+    jQuery(document).ready(function() {
+        // initiate layout and plugins
+        App.init();
+        Gallery.init();
+
+        $('.fancybox-video').fancybox({type: 'iframe'});
+    });
+</script>  #}
+
+
+{% endblock %}

@@ -1,0 +1,19 @@
+etab_index:
+    pattern:  /Etablissement
+    defaults: { _controller: NajdahEtabBundle:Etablissement:index }
+
+etab_ajouter:
+    pattern:  /Etablissement/ajouter
+    defaults: { _controller: NajdahEtabBundle:Etablissement:ajouter }
+
+etab_afficher:
+    pattern:  /Etablissement/afficher/{id}
+    defaults: { _controller: NajdahEtabBundle:Etablissement:afficher }
+
+etab_modifier:
+    pattern:  /Etablissement/modifier/{id}
+    defaults: { _controller: NajdahEtabBundle:Etablissement:modifier }
+
+etab_supprimer:
+    pattern:  /Etablissement/supprimer/{id}
+    defaults: { _controller: NajdahEtabBundle:Etablissement:supprimer }

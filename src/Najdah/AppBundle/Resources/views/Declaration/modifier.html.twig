@@ -1,0 +1,12 @@
+{# src/Najdah/AppBundle/Resources/views/Declaration/modifier.html.twig #}
+
+{% extends "NajdahAppBundle::layout.html.twig" %}
+
+{% block menu_Declarations %}<span class="selected"></span>{% endblock %}
+{% block menu_Declarations_active %}active{% endblock %}
+
+{% block body_app %}
+    <h2>Modifier :</h2>
+	
+    {% include "NajdahAppBundle:Declaration:formulaire.html.twig" %}
+{% endblock %}
